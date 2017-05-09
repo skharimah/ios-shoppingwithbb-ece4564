@@ -10,9 +10,6 @@ import UIKit
 
 class RecipeViewController: UIViewController {
     
-    var recipeList2 = [String]();
-    var recipeControllerList:[String]?
-    
     @IBOutlet weak var recipeTitle: UILabel!
     @IBOutlet weak var recipeImage: UIImageView!
     

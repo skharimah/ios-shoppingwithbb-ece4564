@@ -36,7 +36,7 @@ class CentralViewController: UIViewController, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         
-        //let url = "http://172.29.108.106:5000/get_recipe"
+        let url = "http://172.29.108.106:5000/get_recipe"
         
         for beacon in beacons {
             var beaconProximity: String;
@@ -50,9 +50,7 @@ class CentralViewController: UIViewController, CLLocationManagerDelegate {
             
             if(beaconProximity == "Immediate") {
                 
-                //let urlWithParams = restApiManager.getRecipeUrlWithParams(baseUrl: url, username: "netappsteam01@vt.edu", password: "finalproject", uuid: String(describing: beacon.proximityUUID), major: (Int)(beacon.major), minor: (Int)(beacon.minor))
-                
-                let urlWithParams = "https://httpbin.org/get"
+                let urlWithParams = restApiManager.getRecipeUrlWithParams(baseUrl: url, username: "netappsteam01@vt.edu", password: "finalproject", uuid: String(describing: beacon.proximityUUID), major: (Int)(beacon.major), minor: (Int)(beacon.minor))
                 
                 print("...beaconProximity == Immediate")
                 

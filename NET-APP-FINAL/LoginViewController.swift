@@ -23,15 +23,11 @@ class LoginViewController: UIViewController {
         let password = String(describing: self.passwordField.text!)
         let loginHttpUrl = restApiManager.getLoginUrlWithParams(baseUrl: baseUrl, username: username, password: password)
         
-        print(loginHttpUrl)
+        restApiManager.getHttpRequest(urlWithParams: loginHttpUrl, pageView: "Login")
         
-        performSegue(withIdentifier: "Central", sender: self)
-        
-        //restApiManager.getHttpRequest(urlWithParams: loginHttpUrl, pageView: "Login")
-        
-        //if(restApiManager.getLoginAccountReply() == ":)") {
-        //    performSegue(withIdentifier: "Central", sender: self)
-        //}
+        if(restApiManager.getLoginAccountReply() == ":)") {
+            performSegue(withIdentifier: "Central", sender: self)
+        }
     }
     
     override func viewDidLoad() {
