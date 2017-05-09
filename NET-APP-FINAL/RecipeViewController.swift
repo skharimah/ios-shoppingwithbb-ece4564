@@ -19,17 +19,19 @@ class RecipeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let recipeImageTitle = globalVariables.recipeTitle
-        let recipeImageUrl = globalVariables.recipeImageUrl
-        
-        print("recipeViewController = " + recipeImageTitle)
-        print("recipeViewController = " + recipeImageUrl)
-        
-        if let url = NSURL(string: recipeImageUrl) {
-            if let data = NSData(contentsOf: url as URL) {
-                recipeImage.image = UIImage(data: data as Data)
+        if(globalVariables.updatedInRestApi) {
+            let recipeImageTitle = globalVariables.recipeTitle
+            let recipeImageUrl = globalVariables.recipeImageUrl
+            
+            print("recipeViewController = " + recipeImageTitle)
+            print("recipeViewController = " + recipeImageUrl)
+            
+            if let url = NSURL(string: recipeImageUrl) {
+                if let data = NSData(contentsOf: url as URL) {
+                    recipeImage.image = UIImage(data: data as Data)
+                }
             }
+            recipeTitle.text = recipeImageTitle
         }
-        recipeTitle.text = recipeImageTitle
     }
 }

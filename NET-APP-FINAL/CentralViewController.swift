@@ -11,10 +11,6 @@ import CoreLocation
 
 class CentralViewController: UIViewController, CLLocationManagerDelegate {
     
-    private var numberOfApples = 0;
-    private var numberOfOranges = 0;
-    private var numberOfPinapples = 0;
-    
     @IBOutlet weak var shoppingCartButton: UIButton!
     
     let locationManager = CLLocationManager()
@@ -40,7 +36,7 @@ class CentralViewController: UIViewController, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         
-        let url = "http://172.29.108.106:5000/get_recipe"
+        //let url = "http://172.29.108.106:5000/get_recipe"
         
         for beacon in beacons {
             var beaconProximity: String;
@@ -50,32 +46,31 @@ class CentralViewController: UIViewController, CLLocationManagerDelegate {
             case CLProximity.near:       beaconProximity = "Near";
             case CLProximity.immediate:  beaconProximity = "Immediate";
             }
-            print("BEACON RANGED: uuid: \(beacon.proximityUUID) major: \(beacon.major)  minor: \(beacon.minor) proximity: \(beaconProximity)")
+            //print("BEACON RANGED: uuid: \(beacon.proximityUUID) major: \(beacon.major)  minor: \(beacon.minor) proximity: \(beaconProximity)")
             
             if(beaconProximity == "Immediate") {
                 
-                let urlWithParams = restApiManager.getRecipeUrlWithParams(baseUrl: url, username: "netappsteam01@vt.edu", password: "finalproject", uuid: String(describing: beacon.proximityUUID), major: (Int)(beacon.major), minor: (Int)(beacon.minor))
+                //let urlWithParams = restApiManager.getRecipeUrlWithParams(baseUrl: url, username: "netappsteam01@vt.edu", password: "finalproject", uuid: String(describing: beacon.proximityUUID), major: (Int)(beacon.major), minor: (Int)(beacon.minor))
+                
+                let urlWithParams = "https://httpbin.org/get"
                 
                 print("...beaconProximity == Immediate")
                 
                 if((Int)(beacon.minor) == 1010) {
-                    if(numberOfApples == 0) {
-                        numberOfApples = 1
-                        restApiManager.getHttpRequest(urlWithParams: urlWithParams, pageView: "Recipe")
+                    restApiManager.getHttpRequest(urlWithParams: urlWithParams, pageView: "Recipe")
+                    if(globalVariables.updatedInRestApi) {
                         performSegue(withIdentifier: "Recipe", sender: self)
                     }
                 }
                 else if((Int)(beacon.minor) == 1009) {
-                    if(numberOfOranges == 0) {
-                        numberOfOranges = 1
-                        restApiManager.getHttpRequest(urlWithParams: urlWithParams, pageView: "Recipe")
+                    restApiManager.getHttpRequest(urlWithParams: urlWithParams, pageView: "Recipe")
+                    if(globalVariables.updatedInRestApi) {
                         performSegue(withIdentifier: "Recipe", sender: self)
                     }
                 }
                 else if((Int)(beacon.minor) == 1012) {
-                    if(numberOfPinapples == 0) {
-                        numberOfPinapples = 1
-                        restApiManager.getHttpRequest(urlWithParams: urlWithParams, pageView: "Recipe")
+                    restApiManager.getHttpRequest(urlWithParams: urlWithParams, pageView: "Recipe")
+                    if(globalVariables.updatedInRestApi) {
                         performSegue(withIdentifier: "Recipe", sender: self)
                     }
                 }

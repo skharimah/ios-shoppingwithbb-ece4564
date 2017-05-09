@@ -142,10 +142,33 @@ class RestApiManager {
                         self.setLoginAccountReply(newLoginAccountReply: parsedLoginString)
                     }
                     else if(pageView == "Recipe") {
+                        
+                        let parsedJSON = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:Any]
+                        
+                        self.setRecipeTitle(newRecipeTitle: parsedJSON["origin"] as! String)
+                        self.setRecipeImageUrl(newRecipeImageUrl: parsedJSON["url"] as! String)
+                        
+                        print("...getRecipeTitle & ImageUrl")
+                        print(self.getRecipeTitle())
+                        print(self.getRecipeImageUrl())
+                        
+                        globalVariables.recipeTitle = self.getRecipeTitle()
+                        globalVariables.recipeImageUrl = self.getRecipeImageUrl()
+                        globalVariables.updatedInRestApi = true
+                        print("...globalVariableUpdated")
+                        
+                        /*
                         let parsedJSON = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:Any]
                         
                         self.setRecipeTitle(newRecipeTitle: parsedJSON["title"] as! String)
                         self.setRecipeImageUrl(newRecipeImageUrl: parsedJSON["image"] as! String)
+                        
+                        print("...getRecipeTitle & ImageUrl")
+                        print(self.getRecipeTitle())
+                        print(self.getRecipeImageUrl())
+                        */
+                        //self.setRecipeTitle(newRecipeTitle: parsedJSON["title"] as! String)
+                        //self.setRecipeImageUrl(newRecipeImageUrl: parsedJSON["image"] as! String)
                         
                         globalVariables.recipeTitle = self.getRecipeTitle()
                         globalVariables.recipeImageUrl = self.getRecipeImageUrl()
