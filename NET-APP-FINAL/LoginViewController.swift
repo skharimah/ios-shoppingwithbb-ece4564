@@ -14,22 +14,18 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     
-    let restApiManager = RestApiManager()
+    var restApiManager = RestApiManager()
     
     @IBAction func onClick(_ sender: UIButton) {
-        /* TODO: Send username and password info to the server */
-        let baseUrl = "http://beacons.someurl.com:5000/get_login"
+        
+        let baseUrl = "http://172.29.108.106:5000/get_login"
         let username = String(describing: self.usernameField.text!)
         let password = String(describing: self.passwordField.text!)
         let loginHttpUrl = restApiManager.getLoginUrlWithParams(baseUrl: baseUrl, username: username, password: password)
         
-        print(loginHttpUrl)
-        
         restApiManager.getHttpRequest(urlWithParams: loginHttpUrl, pageView: "Login")
         
-        if(restApiManager.getLoginAccountReply() != "Already Registered") {
-            /* TODO: Show warning that the account doesnt exist */
-        } else if (restApiManager.getLoginAccountReply() == "Already Registered") {
+        if(restApiManager.getLoginAccountReply() == ":)") {
             performSegue(withIdentifier: "Central", sender: self)
         }
     }

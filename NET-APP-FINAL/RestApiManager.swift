@@ -8,6 +8,13 @@
 
 import Foundation
 
+struct globalVariables {
+    static var recipeTitle = String()
+    static var recipeImageUrl = String()
+    static var balanceDue = String()
+    static var updatedInRestApi = Bool()
+}
+
 class RestApiManager {
     
     /* TODO: Update the variable names for specified fields */
@@ -27,6 +34,20 @@ class RestApiManager {
     /// - returns: base url with specified parameters to be used for HTTP request
     func getUrlWithParams(baseUrl: String, uuid: String, major: (Int), minor: (Int)) -> String {
         let urlWithParams = baseUrl + "?uuid=\(uuid)&major=\(major)&minor=\(minor)"
+        return urlWithParams
+    }
+    
+    /// Generate a url with the required parameters.
+    ///
+    /// - parameter baseUrl:  Endpoint url for the HTTP request
+    /// - parameter uuid:     iBeacon ProximityUUID
+    /// - parameter canvasId: Canvas ID associated to user
+    /// - parameter major:    iBeacon major number
+    /// - parameter minor:    iBeacon minor number
+    ///
+    /// - returns: base url with specified parameters to be used for HTTP request
+    func getRecipeUrlWithParams(baseUrl: String, username: String, password: String, uuid: String, major: (Int), minor: (Int)) -> String {
+        let urlWithParams = baseUrl + "?username=\(username)&password=\(password)&uuid=\(uuid)&major=\(major)&minor=\(minor)"
         return urlWithParams
     }
     
@@ -90,7 +111,7 @@ class RestApiManager {
     ///
     /// - parameter newCanvasUrl: "title" field value to update the class' variable
     private func setRecipeImageUrl(newRecipeImageUrl: String) {
-        self.recipeTitle = newRecipeImageUrl
+        self.recipeImageUrl = newRecipeImageUrl
     }
     
     /// Store the "title" field value from JSON response into the class' private variable.
@@ -106,6 +127,8 @@ class RestApiManager {
     /// - parameter pageView: the controller page that sends the request; used to parse JSON field
     func getHttpRequest(urlWithParams: String, pageView: String) {
         
+        print("...getHttpRequest")
+        
         let urlRequest = URL(string: urlWithParams)
         
         URLSession.shared.dataTask(with:urlRequest!) { (data, response, error) in
@@ -113,17 +136,27 @@ class RestApiManager {
                 print(error as Any)
             } else {
                 do {
-                    let parsedJSON = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:Any]
-                    
                     if(pageView == "Login") {
-                        self.setLoginAccountReply(newLoginAccountReply: parsedJSON["reply"] as! String)
+                        let loginString = String(data: data!, encoding: String.Encoding.utf8)
+                        let parsedLoginString = String(describing: loginString!)
+                        self.setLoginAccountReply(newLoginAccountReply: parsedLoginString)
                     }
                     else if(pageView == "Recipe") {
+                        let parsedJSON = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:Any]
+                        
                         self.setRecipeTitle(newRecipeTitle: parsedJSON["title"] as! String)
                         self.setRecipeImageUrl(newRecipeImageUrl: parsedJSON["image"] as! String)
+                        
+                        globalVariables.recipeTitle = self.getRecipeTitle()
+                        globalVariables.recipeImageUrl = self.getRecipeImageUrl()
+                        globalVariables.updatedInRestApi = true
                     }
                     else if(pageView == "Payment") {
+                        let parsedJSON = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:Any]
                         self.setPaymentResponse(newPaymentResponse: parsedJSON["pay_response"] as! String)
+                        
+                        globalVariables.balanceDue = self.getPaymentResponse()
+                        globalVariables.updatedInRestApi = true
                     }
      
                 } catch let error as NSError {

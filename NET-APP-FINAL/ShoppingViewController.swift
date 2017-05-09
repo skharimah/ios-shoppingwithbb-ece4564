@@ -17,15 +17,15 @@ class ShoppingViewController: UIViewController {
     @IBOutlet weak var payButton: UIButton!
     
     @IBAction func payOnClick(_ sender: UIButton) {
-        /* TODO: Send username and password info to the server */
-        let baseUrl = ""
+        
+        let baseUrl = "http://172.29.108.106:5000/get_pay_request"
         let username = "netappsteam01@vt.edu"
         let password = "finalproject"
         let loginHttpUrl = restApiManager.getLoginUrlWithParams(baseUrl: baseUrl, username: username, password: password)
         
-        restApiManager.getHttpRequest(urlWithParams: loginHttpUrl, pageView: "Login")
+        restApiManager.getHttpRequest(urlWithParams: loginHttpUrl, pageView: "Payment")
         
-        let paymentResponse = restApiManager.getPaymentResponse()
+        let paymentResponse = globalVariables.balanceDue
         
         balanceField.text = "$" + paymentResponse
     }

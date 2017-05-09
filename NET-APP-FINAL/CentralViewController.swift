@@ -15,14 +15,13 @@ class CentralViewController: UIViewController, CLLocationManagerDelegate {
     private var numberOfOranges = 0;
     private var numberOfPinapples = 0;
     
-    private var recipeControllerList = [String]()
-    
     @IBOutlet weak var shoppingCartButton: UIButton!
     
     let locationManager = CLLocationManager()
     let region = CLBeaconRegion(proximityUUID: NSUUID(uuidString: "F3F73797-8720-45A1-9C6A-B105E24D1484")! as UUID, major: 1000, minor: 1010, identifier: "F4:B8:5E:58:36:19")
     let secondRegion = CLBeaconRegion(proximityUUID: NSUUID(uuidString: "F3F73797-8720-45A1-9C6A-B105E24D1484")! as UUID, major: 1000, minor: 1012, identifier: "F4:B8:5E:59:4F:A7")
     let thirdRegion = CLBeaconRegion(proximityUUID: NSUUID(uuidString: "F3F73797-8720-45A1-9C6A-B105E24D1484")! as UUID, major: 1000, minor: 1009, identifier: "F4:B8:5E:58:37:9A")
+    
     let restApiManager = RestApiManager()
     
     override func viewDidLoad() {
@@ -36,25 +35,12 @@ class CentralViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.startRangingBeacons(in: region)
         locationManager.startRangingBeacons(in: secondRegion)
         locationManager.startRangingBeacons(in: thirdRegion)
+
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "Recipe") {
-            let secondViewController = segue.destination as! RecipeViewController
-            
-            let recipeImageUrl = restApiManager.getRecipeImageUrl() as String
-            let recipeTitle = restApiManager.getRecipeTitle() as String
-            recipeControllerList.append(recipeImageUrl)
-            recipeControllerList.append(recipeTitle)
-            
-            secondViewController.recipeControllerList = recipeControllerList
-        }
-    }
-
     func locationManager(_ manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], in region: CLBeaconRegion) {
         
-        /* TODO: Update base URL */
-        let url = "http://beacons.someurl.com:5000/get_recipe"
+        let url = "http://172.29.108.106:5000/get_recipe"
         
         for beacon in beacons {
             var beaconProximity: String;
@@ -68,28 +54,27 @@ class CentralViewController: UIViewController, CLLocationManagerDelegate {
             
             if(beaconProximity == "Immediate") {
                 
-                let urlWithParams = restApiManager.getUrlWithParams(baseUrl: url, uuid: String(describing: beacon.proximityUUID), major: (Int)(beacon.major), minor: (Int)(beacon.minor))
+                let urlWithParams = restApiManager.getRecipeUrlWithParams(baseUrl: url, username: "netappsteam01@vt.edu", password: "finalproject", uuid: String(describing: beacon.proximityUUID), major: (Int)(beacon.major), minor: (Int)(beacon.minor))
                 
-                print(urlWithParams)
+                print("...beaconProximity == Immediate")
                 
                 if((Int)(beacon.minor) == 1010) {
                     if(numberOfApples == 0) {
-                        numberOfApples = 1;
+                        numberOfApples = 1
                         restApiManager.getHttpRequest(urlWithParams: urlWithParams, pageView: "Recipe")
                         performSegue(withIdentifier: "Recipe", sender: self)
-                        
                     }
                 }
                 else if((Int)(beacon.minor) == 1009) {
                     if(numberOfOranges == 0) {
-                        numberOfOranges = 1;
+                        numberOfOranges = 1
                         restApiManager.getHttpRequest(urlWithParams: urlWithParams, pageView: "Recipe")
                         performSegue(withIdentifier: "Recipe", sender: self)
                     }
                 }
                 else if((Int)(beacon.minor) == 1012) {
                     if(numberOfPinapples == 0) {
-                        numberOfPinapples = 1;
+                        numberOfPinapples = 1
                         restApiManager.getHttpRequest(urlWithParams: urlWithParams, pageView: "Recipe")
                         performSegue(withIdentifier: "Recipe", sender: self)
                     }

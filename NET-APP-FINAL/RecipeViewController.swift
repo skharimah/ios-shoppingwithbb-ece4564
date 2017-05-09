@@ -10,6 +10,7 @@ import UIKit
 
 class RecipeViewController: UIViewController {
     
+    var recipeList2 = [String]();
     var recipeControllerList:[String]?
     
     @IBOutlet weak var recipeTitle: UILabel!
@@ -18,14 +19,17 @@ class RecipeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let url = NSURL(string: recipeControllerList![0]) {
+        let recipeImageTitle = globalVariables.recipeTitle
+        let recipeImageUrl = globalVariables.recipeImageUrl
+        
+        print("recipeViewController = " + recipeImageTitle)
+        print("recipeViewController = " + recipeImageUrl)
+        
+        if let url = NSURL(string: recipeImageUrl) {
             if let data = NSData(contentsOf: url as URL) {
                 recipeImage.image = UIImage(data: data as Data)
-            }        
+            }
         }
-        
-        recipeTitle.text = recipeControllerList?[1]
-        
+        recipeTitle.text = recipeImageTitle
     }
-    
 }
