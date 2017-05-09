@@ -28,8 +28,11 @@ class ShoppingViewController: UIViewController {
         let loginHttpUrl = "https://httpbin.org/gzip"
         restApiManager.getHttpRequest(urlWithParams: loginHttpUrl, pageView: "Payment")
         let paymentResponse = globalVariables.balanceDue
-        balanceField.text = "$" + paymentResponse
-        
+        if(paymentResponse == "") {
+            balanceField.text = "Not yet available"
+        } else {
+            balanceField.text = "$" + paymentResponse
+        }
     }
     
     override func viewDidLoad() {
