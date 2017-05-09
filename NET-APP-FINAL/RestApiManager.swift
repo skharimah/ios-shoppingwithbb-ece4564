@@ -13,6 +13,7 @@ struct globalVariables {
     static var recipeImageUrl = String()
     static var balanceDue = String()
     static var updatedInRestApi = Bool()
+    static var updatedBalanceInRestApi = Bool()
 }
 
 class RestApiManager {
@@ -176,10 +177,13 @@ class RestApiManager {
                     }
                     else if(pageView == "Payment") {
                         let parsedJSON = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:Any]
-                        self.setPaymentResponse(newPaymentResponse: parsedJSON["pay_response"] as! String)
                         
+                        print("...getPaymentResponse")
+                        self.setPaymentResponse(newPaymentResponse: parsedJSON["method"] as! String)
+                        print(self.getPaymentResponse())
                         globalVariables.balanceDue = self.getPaymentResponse()
-                        globalVariables.updatedInRestApi = true
+                        globalVariables.updatedBalanceInRestApi = true
+                        print("...updatedBalanceInRestApi = true")
                     }
      
                 } catch let error as NSError {
